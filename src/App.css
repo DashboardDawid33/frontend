@@ -1,0 +1,44 @@
+.App {
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.LoginForm {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1em 1em 2em 2em;
+  row-gap: 5%;
+  column-gap: 1vw;
+  justify-content: left;
+}
+
+.LoginForm-header {
+  color:lightsalmon;
+  text-align: center;
+  grid-row: 1;
+  grid-column: span 2;
+}
+
+.LoginForm-item {
+}
+
+.LoginForm-button {
+  
+  justify-self: center;
+  padding-left: 35%;
+  padding-right: 35%;
+  border-radius: 10px;
+  font-size: large;
+  color: darkblue;
+  border-color: salmon;
+  background-color: salmon;
+}
