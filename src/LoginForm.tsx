@@ -1,11 +1,10 @@
-import { wait, waitFor } from '@testing-library/react';
-import { stat } from 'fs';
 import React from 'react';
 import './App.css';
 
 interface LoginFormState {
     username : string;
     password : string;
+    result : string;
 }
 
     export default class LoginForm extends React.Component<{}, LoginFormState> {
@@ -13,7 +12,8 @@ interface LoginFormState {
         super(props)
         this.state = {
             username : "",
-            password : ""
+            password : "",
+            result : "",
         };
         this.handleLogin = this.handleLogin.bind(this);
         this.handleRegister = this.handleRegister.bind(this);
@@ -21,12 +21,24 @@ interface LoginFormState {
         this.updatePassword = this.updatePassword.bind(this);
     }
     handleLogin(event : any) {
-        let socket = new WebSocket("ws://backend:8888");
+        let socket = new WebSocket("ws://localhost:8888");
         socket.onopen = (event : Event) => {
-            socket.send(this.state.username);
+            socket.send(JSON.stringify({
+                request_type: "LOGIN",
+                username: this.state.username,
+                password: this.state.password
+            }));
         }
+        socket.onerror = (event : Event) => {
+            this.setState({
+                result : "ERROR",
+            })
+        }
+            
         socket.onmessage = (event : MessageEvent) => {
-            alert(event.data);
+            this.setState({
+                result : event.data,
+            })
         }
     }
     handleRegister(event : any) {
@@ -42,13 +54,16 @@ interface LoginFormState {
 
     render() {
         return (
-            <form className="LoginForm">
-                <h1 className="LoginForm-header">Login</h1>
-                <label className="LoginForm-item">Name</label><input type="text" name="name" onChange={this.updateUsername}/>
-                <label className="LoginForm-item">Password</label><input type="text" name="password" onChange={this.updatePassword}/>
-                <input type="button" className="LoginForm-button" value="Login" onClick={this.handleLogin}/>
-                <input type="button" className="LoginForm-button" value="Register" onClick={this.handleRegister}/>
-            </form>
+            <div>
+                <form className="LoginForm">
+                    <h1 className="LoginForm-header">Login</h1>
+                    <label className="LoginForm-item">Name</label><input type="text" name="name" onChange={this.updateUsername}/>
+                    <label className="LoginForm-item">Password</label><input type="text" name="password" onChange={this.updatePassword}/>
+                    <input type="button" className="LoginForm-button" value="Login" onClick={this.handleLogin}/>
+                    <input type="button" className="LoginForm-button" value="Register" onClick={this.handleRegister}/>
+                </form>
+                <p className="LoginForm-result">{this.state.result}</p>
+            </div>
         );
     }
 }

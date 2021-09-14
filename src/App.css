@@ -42,3 +42,7 @@
   border-color: salmon;
   background-color: salmon;
 }
+
+.LoginForm-result {
+  font-size: small;
+}
